@@ -1,0 +1,58 @@
+version: '2'
+
+volumes:
+  sync-volume:
+    external: true
+
+services:
+  memcached:
+    image: memcached:1.4
+    ports:
+      - "11212:11211"
+
+  data:
+    image: busybox
+    volumes:
+      - ./docker/misc/data:/var/lib/mysql
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_DATABASE}
+    ports:
+      - "${MYSQL_DATAPORT}:3306"
+    volumes_from:
+      - data
+    volumes:
+      - ./app/initial.sql:/docker-entrypoint-initdb.d/initial.sql
+    container_name: ${PRODUCT_NAME}_mysql
+
+  nginx:
+    build: ./docker/nginx
+    ports:
+      - "${NGINX_POST}:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/html
+    links:
+      - web
+    container_name: ${PRODUCT_NAME}_nginx
+
+  web:
+    #    build: ./php-fpm73   # <- if you want to use PHP7.3
+    #    build: ./php-fpm72   # <- if you want to use PHP7.2
+    build: ./docker/php-fpm71
+    #    build: ./php-fpm56    # <- if you want to use PHP5.6
+    volumes:
+      - sync-volume:/var/www/html
+    links:
+      - mysql
+    environment:
+      DATABASE_HOST: 'mysql'
+      DATABASE_NAME: ${MYSQL_DATABASE}
+      DATABASE_USER: ${MYSQL_USER}
+      DATABASE_PASSWORD: ${MYSQL_PASSWORD}
+    container_name: ${PRODUCT_NAME}_web

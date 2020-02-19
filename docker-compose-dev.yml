@@ -1,0 +1,10 @@
+version: '2'
+
+volumes:
+  sync-volume:
+    external: true
+
+services:
+  web:
+    volumes:
+      - sync-volume:/var/www/html:nocopy

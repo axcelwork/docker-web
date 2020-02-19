@@ -1,0 +1,11 @@
+# Docker MySQLのデータが入るディレクトリ
+docker/misc/data
+
+# PHPStorm
+.idea
+
+# サイト固有のファイル/ディレクトリ
+.DS_Store
+thumbs.db
+package-lock.json
+node_modules/
