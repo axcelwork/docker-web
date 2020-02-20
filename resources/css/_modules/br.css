@@ -1,0 +1,35 @@
+@import 'media.css';
+
+@media (--pc-view) {
+    .tab-only,
+    .smp-only {
+        display: none !important;
+    }
+
+    .pc-only {
+        /* display: block !important; */
+        display: inherit !important;
+    }
+}
+
+@media (--tab-view) {
+    .pc-only,
+    .smp-only {
+        display: none !important;
+    }
+
+    .tab-only {
+        display: block !important;
+    }
+}
+
+@media (--smp-view) {
+    .pc-only,
+    .tab-only {
+        display: none !important;
+    }
+
+    .smp-only {
+        display: block !important;
+    }
+}

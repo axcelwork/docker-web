@@ -1,0 +1,11 @@
+@define-mixin iconset {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  transition: all .25s cubic-bezier(.215,.61,.355,1);
+
+  font-family: "icon";
+  font-weight: normal;
+  line-height: 1;
+  letter-spacing: 0;
+}
